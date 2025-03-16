@@ -31,7 +31,7 @@ func main()  {
   fmt.Printf("what's the key: ")
   fmt.Scan(&key)
 
-  f, err := os.Open("../encrypt/encryptedfile.txt")
+  f, err := os.Open("../encrypt/encrypted.gpg")
   if err != nil {
     fmt.Println("Error Opening the file: ", err)
   }

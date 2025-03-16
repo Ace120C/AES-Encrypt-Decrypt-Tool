@@ -32,15 +32,30 @@ func encryptAES(key, plaintext []byte) ([]byte, error) {
 
 
 func main()  {
-  key := []byte("1234567890123456")
-  fmt.Print("Msg: ")
-  fmt.Scanln(&plainText)
-  ciphertext, err := encryptAES(key, plainText)
+  var key []byte
+  var path string
+  fmt.Print("Type your passkey (has to be 16 char long): ")
+  fmt.Scanln(&key)
+  fmt.Print("Path: ")
+  fmt.Scanln(&path)
+
+  fp, err := os.Open(path)
+  if err != nil {
+    fmt.Println("Couldn't open path: ", err)
+  }
+  defer fp.Close()
+
+  c, err := io.ReadAll(fp)
+  if err != nil {
+    fmt.Println("couldn't read file: ", err)
+  }
+
+  ciphertext, err := encryptAES(key, c)
   if err != nil {
     fmt.Println("error: ", err)
   }
 
-  file := "encryptedfile.txt"
+  file := "encrypted.gpg"
   content := ciphertext
   
   f, err := os.Create(file)

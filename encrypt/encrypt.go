@@ -33,13 +33,29 @@ func encryptAES(key, plaintext []byte) ([]byte, error) {
 
 func main()  {
   var key []byte
+  var keypath string
   var path string
-  fmt.Print("Type your passkey (has to be 16 char long): ")
-  fmt.Scanln(&key)
-  fmt.Print("Path: ")
+
+  fmt.Print("Your Passkey's path: ")
+  fmt.Scanln(&keypath)
+
+  fmt.Print("\nFile Path: ")
   fmt.Scanln(&path)
 
+  keyPath, err := os.Open(keypath)
+  if err != nil {
+    fmt.Println("Error: ", err)
+  }
+
+  defer keyPath.Close()
+
+  key, err = io.ReadAll(keyPath)
+  if err != nil {
+    fmt.Println("Error: ", err)
+  }
+
   fp, err := os.Open(path)
+
   if err != nil {
     fmt.Println("Couldn't open path: ", err)
   }

@@ -28,8 +28,22 @@ func decryptAES(key, ciphertext []byte)  ([]byte, error){
 
 
 func main()  {
-  fmt.Printf("what's the key: ")
-  fmt.Scan(&key)
+  var keypath string
+
+  fmt.Printf("what's the key path: ")
+  fmt.Scanln(&keypath)
+
+  p, err := os.Open(keypath)
+  if err != nil {
+    fmt.Println("Error: couldn't open keypath ", err)
+  }
+  defer p.Close()
+
+  key, err := io.ReadAll(p)
+  if err != nil {
+    fmt.Println("Error: couldnt read ", err)
+  }
+
 
   f, err := os.Open("../encrypt/encrypted.gpg")
   if err != nil {
@@ -47,6 +61,7 @@ func main()  {
   plainText, err := decryptAES(key, ciphertext)
   if err != nil {
     fmt.Println("couldn't decrypt: ", err)
+    return
   }
   fmt.Println("file decrypted successfully!")
 
